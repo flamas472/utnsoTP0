@@ -20,14 +20,15 @@ void* serializar_paquete(t_paquete* paquete, int *bytes)
 
 	memcpy(aEnviar + offset, &paquete->codigo_operacion, sizeof(op_code));//copiando codigo de operacion
 	printf("SerializarPaquete -> Operación: %d (1 = MENSAJE).\n", *(int*)(aEnviar+offset));
-	offset += sizeof(op_code);
+	offset += sizeof(op_code);//desplazamiento
 
 	memcpy(aEnviar + offset, &paquete->buffer->size, sizeof(int));//copia tamaño del stream (del contenido)
 	printf("SerializarPaquete -> Size: %d.\n", *(int*)(aEnviar+offset));
+	offset += sizeof(int);//desplazamiento
 
 
 	memcpy(aEnviar + offset, paquete->buffer->stream, paquete->buffer->size);//copia el stream (el contenido)
-	printf("SerializarPaquete -> Stream: %s.\n", (char*)(aEnviar+offset));
+	printf("SerializarPaquete -> Stream: \"%s\".\n", (char*)(aEnviar+offset));
 
 	return aEnviar;
 }
@@ -63,11 +64,12 @@ void enviar_mensaje(char* mensaje, int socket_cliente)
 	paquete->buffer->size = strlen(mensaje) + 1;
 	paquete->buffer->stream = malloc(paquete->buffer->size);
 	memcpy(paquete->buffer->stream, mensaje, paquete->buffer->size);
-	printf("EnviarMensaje -> Mensaje Empaquetado: %s.\n", (char*)paquete->buffer->stream);
+	printf("EnviarMensaje -> Mensaje Empaquetado: \"%s\".\n", (char*)paquete->buffer->stream);
 	int bytes = 0;
 	void* aEnviar = serializar_paquete(paquete, &bytes);
 	printf("EnviarMensaje -> Paquete Serializado - Tamaño Total: %d Bytes.\n", bytes);
 	estado = send(socket_cliente, aEnviar, bytes, 0);
+
 	switch (estado) {
 		case -1:
 			printf("EnviarMensaje -> Error al enviar.\n");
@@ -104,7 +106,7 @@ char* recibir_mensaje(int socket_cliente)
 			string = malloc(size);
 			recv(socket_cliente,stream, size, 0);
 			memcpy(string, stream, size);
-			printf("RecibirMensaje -> Mensaje: %s - Longitud: %d.\n", string, strlen(string));
+			printf("RecibirMensaje -> Mensaje: \"%s\" - Longitud: %d.\n", string, strlen(string));
 			break;
 		default:
 			printf("RecibirMensaje -> Error OpCode: %d.\n", codigo_operacion);

@@ -44,7 +44,7 @@ int main(void)
 	char* mensaje = malloc(32);
 	printf("Ingrese su mensaje;.\n-> ");
 	scanf("%s", mensaje);
-	printf("Usted ingreso: %s.\n\n", mensaje);
+	printf("Usted ingreso: \"%s\".\n\n", mensaje);
 
 	enviar_mensaje(mensaje, conexion);
 
