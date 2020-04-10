@@ -18,12 +18,12 @@ int main(void)
 	t_config* config;
 
 	logger = iniciar_logger();
-	log_info(logger, "soy un log\n");//Loggear "soy un log"
+	log_info(logger, "Programa TP0 iniciado");//Loggear "soy un log"
 
 	config = leer_config();
 	ip = config_get_string_value(config, "IP");
 	puerto = config_get_string_value(config, "PUERTO");
-	printf("\nConfiguraciones:\nIP = %s\nPUERTO = %s\n",ip, puerto);//Muestro la configuracion actual IP/puerto
+	printf(".\nConfiguraciones:.\nIP = %s.\nPUERTO = %s.\n",ip, puerto);//Muestro la configuracion actual IP/puerto
 
 
 
@@ -34,33 +34,36 @@ int main(void)
 	//crear conexion
 	conexion = crear_conexion(ip, puerto);
 	if(conexion==-1){
-		printf("Hubo un error\n");
+		printf("Hubo un error.\n");
 	} else {
-		printf("Conexión exitosa: %d\n", conexion);
+		printf("Conexión exitosa: %d.\n", conexion);
 	}
 
 
 	//enviar mensaje
 	char* mensaje = malloc(32);
-	printf("Ingrese su mensaje;\n-> ");
+	printf("Ingrese su mensaje;.\n-> ");
 	scanf("%s", mensaje);
-	//strcpy(mensaje, "prueba");
-	printf("Usted ingreso: %s\n\n", mensaje);
+	printf("Usted ingreso: %s.\n\n", mensaje);
 
-
-	printf("Se va a enviar su mensaje.\n");
 	enviar_mensaje(mensaje, conexion);
-	printf("en teoria se envio el mensaje\n");
 
 
 	//recibir mensaje
 	char* mensajerecibido = recibir_mensaje(conexion);
-	printf("en teoria se recibio el mensaje\n");
-	//loguear mensaje recibido
 
-	printf("\nse procedera a liberar la memoria antes de terminar el programa.\n");
-	//terminar_programa(conexion, logger, config);
-	printf("memoria liberada\n");
+
+	//loguear mensaje recibido
+	log_info(logger, mensajerecibido);
+
+
+	/*printf(".\nse procedera a liberar la memoria antes de terminar el programa..\n");
+	free(ip);
+	printf("IP liberado");
+	free(puerto);
+	printf("Puerto liberado");
+	terminar_programa(conexion, logger, config);
+	printf("memoria liberada.\n");//*/
 
 }//main
 
@@ -82,7 +85,13 @@ t_config* leer_config(void)
 //TODO
 void terminar_programa(int conexion, t_log* logger, t_config* config)
 {
+	liberar_conexion(conexion);
+	printf("Conexion liberada.\n");
+
 	log_destroy(logger);
+	printf("Logger destruido.\n");
+
 	config_destroy(config);
+	printf("Config destruido");
 	//Y por ultimo, para cerrar, hay que liberar lo que utilizamos (conexion, log y config) con las funciones de las commons y del TP mencionadas en el enunciado
 }
