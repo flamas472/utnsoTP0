@@ -31,7 +31,7 @@ void* serializar_paquete(t_paquete* paquete, int *bytes)
 	printf("offset = %d\n", offset);
 
 
-	memcpy(aEnviar + offset, &paquete->buffer->stream, paquete->buffer->size);//copia el stream (el contenido)
+	memcpy(aEnviar + offset, paquete->buffer->stream, paquete->buffer->size);//copia el stream (el contenido)
 	printf("\nserializado: stream = %s\n", (char*)paquete->buffer->stream);
 	printf("aenviar(3) = %s\n", (char*)(aEnviar+offset));
 	printf("serialización completada, no más offset\n\n");
