@@ -23,7 +23,7 @@ int main(void)
 	config = leer_config();
 	ip = config_get_string_value(config, "IP");
 	puerto = config_get_string_value(config, "PUERTO");
-	printf(".\nConfiguraciones:.\nIP = %s.\nPUERTO = %s.\n",ip, puerto);//Muestro la configuracion actual IP/puerto
+	printf("\nConfiguraciones:.\nIP = %s.\nPUERTO = %s.\n",ip, puerto);//Muestro la configuracion actual IP/puerto
 
 
 
@@ -58,12 +58,12 @@ int main(void)
 
 
 	/*printf(".\nse procedera a liberar la memoria antes de terminar el programa..\n");
-	free(ip);
+	*/free(ip);
 	printf("IP liberado");
 	free(puerto);
 	printf("Puerto liberado");
 	terminar_programa(conexion, logger, config);
-	printf("memoria liberada.\n");//*/
+	printf("memoria liberada.\n");/*//*/
 
 }//main
 
@@ -85,13 +85,13 @@ t_config* leer_config(void)
 //TODO
 void terminar_programa(int conexion, t_log* logger, t_config* config)
 {
-	liberar_conexion(conexion);
+	liberar_conexion(&conexion);
 	printf("Conexion liberada.\n");
 
-	log_destroy(logger);
+	log_destroy(&logger);
 	printf("Logger destruido.\n");
 
-	config_destroy(config);
+	config_destroy(&config);
 	printf("Config destruido");
 	//Y por ultimo, para cerrar, hay que liberar lo que utilizamos (conexion, log y config) con las funciones de las commons y del TP mencionadas en el enunciado
 }
